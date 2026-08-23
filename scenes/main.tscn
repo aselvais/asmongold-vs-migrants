@@ -1,0 +1,51 @@
+[gd_scene format=3 uid="uid://ciglnp02rnj3e"]
+
+[ext_resource type="Script" uid="uid://cluy0d660gxss" path="res://scripts/player.gd" id="1_0wfyh"]
+[ext_resource type="Texture2D" uid="uid://clbwamjo5tv8l" path="res://assets/backgrounds/brooklyn_street.png" id="1_sugp2"]
+[ext_resource type="Script" uid="uid://ddloenhjvi8oe" path="res://scripts/main.gd" id="1_tefeu"]
+[ext_resource type="SpriteFrames" uid="uid://b213wslclyy22" path="res://assets/animations/asmongold_frames.tres" id="2_sugp2"]
+[ext_resource type="AudioStream" uid="uid://s3dxlbrtdxgx" path="res://assets/sfx/swoosh.wav" id="4_tbgi4"]
+[ext_resource type="AudioStream" uid="uid://iuyonjvcjf0y" path="res://assets/music/brooklyn_fight.wav" id="5_tefeu"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jyhfs"]
+size = Vector2(36, 90)
+
+[node name="Main" type="Node2D" unique_id=515193215]
+script = ExtResource("1_tefeu")
+
+[node name="Background" type="Sprite2D" parent="." unique_id=1601266165]
+z_index = -10
+texture_filter = 1
+position = Vector2(3200, 512)
+texture = ExtResource("1_sugp2")
+
+[node name="Player" type="CharacterBody2D" parent="." unique_id=598633089]
+z_index = 1
+position = Vector2(640, 820)
+scale = Vector2(2, 2)
+script = ExtResource("1_0wfyh")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Player" unique_id=213904594]
+texture_filter = 1
+sprite_frames = ExtResource("2_sugp2")
+animation = &"idle"
+autoplay = "idle"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player" unique_id=1393633639]
+shape = SubResource("RectangleShape2D_jyhfs")
+
+[node name="Swoosh" type="AudioStreamPlayer" parent="Player" unique_id=1955714786]
+stream = ExtResource("4_tbgi4")
+volume_db = -2.0
+
+[node name="Music" type="AudioStreamPlayer" parent="." unique_id=856043903]
+stream = ExtResource("5_tefeu")
+volume_db = -8.0
+autoplay = true
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=442495124]
+position = Vector2(640, 512)
+limit_left = 0
+limit_top = 0
+limit_right = 6400
+limit_bottom = 1024
