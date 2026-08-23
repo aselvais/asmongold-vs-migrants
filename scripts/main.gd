@@ -10,6 +10,7 @@ const LEVEL_WIDTH := 6400.0
 
 
 func _ready() -> void:
+	camera.make_current()
 	if not music.finished.is_connected(music.play):
 		music.finished.connect(music.play)
 	if not music.playing:
