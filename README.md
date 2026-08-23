@@ -2,6 +2,8 @@
 
 A satirical side-scrolling beat-em-up inspired by *Final Fight* (1989) and *Double Dragon*. You play as Asmongold, clearing the street of a migrant invasion — and the Karens who protect them — on the way to woke / leftist final bosses.
 
+(very early) demo at: https://asmongold-vs-migrants.web.app/
+
 **Status: early prototype.** This is a playable tech demo, not a finished game. Movement, combat animation, camera, audio, and a Brooklyn street stage are in. Enemies, bosses, HUD, and stages beyond the first block are not.
 
 ![Asmongold standing on a dusk Brooklyn street](docs/screenshot.png)
