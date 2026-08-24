@@ -5,7 +5,7 @@
 [ext_resource type="Script" uid="uid://ddloenhjvi8oe" path="res://scripts/main.gd" id="1_tefeu"]
 [ext_resource type="SpriteFrames" uid="uid://b213wslclyy22" path="res://assets/animations/asmongold_frames.tres" id="2_sugp2"]
 [ext_resource type="AudioStream" uid="uid://s3dxlbrtdxgx" path="res://assets/sfx/swoosh.wav" id="4_tbgi4"]
-[ext_resource type="AudioStream" uid="uid://iuyonjvcjf0y" path="res://assets/music/brooklyn_fight.wav" id="5_tefeu"]
+[ext_resource type="AudioStream" uid="uid://chq74g8fikgrw" path="res://assets/music/QuarterCoinRiot.mp3" id="6_tefeu"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jyhfs"]
 size = Vector2(36, 90)
@@ -39,7 +39,7 @@ stream = ExtResource("4_tbgi4")
 volume_db = -2.0
 
 [node name="Music" type="AudioStreamPlayer" parent="." unique_id=856043903]
-stream = ExtResource("5_tefeu")
+stream = ExtResource("6_tefeu")
 volume_db = -8.0
 autoplay = true
 
