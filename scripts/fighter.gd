@@ -6,7 +6,6 @@ const STAGE_RIGHT := 6316.0
 const STAGE_TOP := 1024.0 * 2.0 / 3.0
 const STAGE_BOTTOM := 890.0
 const BODY_HALF_WIDTH := 41.5
-const STRIKE_FRAME_WIDTH := 166.0
 const MAX_HITS := 5
 const STRIKE_HIT_START := 2
 const STRIKE_HIT_END := 5
@@ -15,6 +14,10 @@ const BLINK_COUNT := 2
 const BLINK_STEP := 0.09
 
 signal died
+signal health_changed(current: int, maximum: int)
+
+@export var max_hits: int = MAX_HITS
+@export var strike_sfx_on_start: bool = true
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var swoosh: AudioStreamPlayer = $Swoosh
@@ -31,22 +34,32 @@ var _hit_this_strike: Dictionary = {}
 
 func _ready() -> void:
 	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	sprite.animation_finished.connect(_on_animation_finished)
-	sprite.play(&"idle")
+	if not sprite.animation_finished.is_connected(_on_animation_finished):
+		sprite.animation_finished.connect(_on_animation_finished)
+	_play(&"idle")
 	hitbox.monitoring = false
-	hitbox.area_entered.connect(_on_hitbox_area_entered)
+	if not hitbox.area_entered.is_connected(_on_hitbox_area_entered):
+		hitbox.area_entered.connect(_on_hitbox_area_entered)
 	_sync_sprite_offset()
 	_sync_hitbox_side()
+	health_changed.emit(current_health(), max_hits)
+
+
+func current_health() -> int:
+	return maxi(0, max_hits - hits)
 
 
 func start_strike() -> void:
 	if dead or striking:
 		return
+	if not _has_anim(&"strike"):
+		return
 	striking = true
 	_hit_this_strike.clear()
 	velocity = Vector2.ZERO
 	sprite.play(&"strike")
-	swoosh.play()
+	if strike_sfx_on_start and swoosh:
+		swoosh.play()
 	_sync_sprite_offset()
 	_sync_hitbox_side()
 
@@ -60,10 +73,11 @@ func take_hit(_from: Node) -> void:
 	_set_hitbox_active(false)
 	_play(&"idle")
 	_sync_sprite_offset()
+	health_changed.emit(current_health(), max_hits)
 	await _blink()
 	if not is_instance_valid(self):
 		return
-	if hits >= MAX_HITS:
+	if hits >= max_hits:
 		_die()
 	else:
 		invulnerable = false
@@ -80,7 +94,28 @@ func _die() -> void:
 	hurtbox.set_deferred("monitorable", false)
 	sprite.visible = true
 	sprite.pause()
+	health_changed.emit(current_health(), max_hits)
 	died.emit()
+
+
+func revive() -> void:
+	dead = false
+	striking = false
+	invulnerable = true
+	hits = 0
+	velocity = Vector2.ZERO
+	_set_hitbox_active(false)
+	hurtbox.monitorable = true
+	sprite.visible = true
+	sprite.modulate.a = 1.0
+	_play(&"idle")
+	_sync_sprite_offset()
+	_sync_hitbox_side()
+	health_changed.emit(current_health(), max_hits)
+	await _blink()
+	if not is_instance_valid(self) or dead:
+		return
+	invulnerable = false
 
 
 func _apply_move(direction: Vector2) -> void:
@@ -113,7 +148,15 @@ func _update_hitbox() -> void:
 		_set_hitbox_active(false)
 		return
 	var frame := sprite.frame
-	_set_hitbox_active(frame >= STRIKE_HIT_START and frame <= STRIKE_HIT_END)
+	var count := 0
+	if sprite.sprite_frames:
+		count = sprite.sprite_frames.get_frame_count(sprite.animation)
+	var start := STRIKE_HIT_START
+	var end := STRIKE_HIT_END
+	if count > 0:
+		start = maxi(1, int(count / 3.0))
+		end = maxi(start, int((count * 2) / 3.0))
+	_set_hitbox_active(frame >= start and frame <= end)
 
 
 func _set_hitbox_active(active: bool) -> void:
@@ -122,6 +165,8 @@ func _set_hitbox_active(active: bool) -> void:
 	hitbox.monitoring = active
 	if not active:
 		return
+	if not strike_sfx_on_start and swoosh:
+		swoosh.play()
 	_sync_hitbox_side()
 	for area in hitbox.get_overlapping_areas():
 		_on_hitbox_area_entered(area)
@@ -156,18 +201,41 @@ func _on_animation_finished() -> void:
 
 
 func _play(anim: StringName) -> void:
+	if not _has_anim(anim):
+		return
 	if sprite.animation != anim or not sprite.is_playing():
 		sprite.play(anim)
 
 
+func _has_anim(anim: StringName) -> bool:
+	return sprite.sprite_frames != null and sprite.sprite_frames.has_animation(anim)
+
+
+func _frame_width(anim: StringName = &"", frame: int = -1) -> float:
+	var frames := sprite.sprite_frames
+	if frames == null:
+		return BODY_HALF_WIDTH * 2.0
+	var anim_name := anim if anim != &"" else sprite.animation
+	if not frames.has_animation(anim_name):
+		return BODY_HALF_WIDTH * 2.0
+	var idx := frame if frame >= 0 else sprite.frame
+	var tex := frames.get_frame_texture(anim_name, idx)
+	if tex == null:
+		return BODY_HALF_WIDTH * 2.0
+	return float(tex.get_width())
+
+
 func _sync_sprite_offset() -> void:
-	var frame_width := STRIKE_FRAME_WIDTH if sprite.animation == &"strike" else BODY_HALF_WIDTH * 2.0
-	var shift := frame_width * 0.5 - BODY_HALF_WIDTH
+	var body_width := _frame_width(&"idle", 0)
+	var frame_width := _frame_width()
+	var shift := frame_width * 0.5 - body_width * 0.5
 	sprite.offset.x = -shift if sprite.flip_h else shift
 
 
 func _sync_hitbox_side() -> void:
-	hitbox.position.x = -HITBOX_OFFSET_X if sprite.flip_h else HITBOX_OFFSET_X
+	var body_width := _frame_width(&"idle", 0)
+	var offset_x := maxf(HITBOX_OFFSET_X * (body_width / (BODY_HALF_WIDTH * 2.0)), 40.0)
+	hitbox.position.x = -offset_x if sprite.flip_h else offset_x
 
 
 func _blink() -> void:

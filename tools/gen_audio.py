@@ -237,8 +237,23 @@ def make_music() -> np.ndarray:
     return mix / peak * 0.88
 
 
+def make_punch() -> np.ndarray:
+    dur = 0.18
+    n = int(SR * dur)
+    t = np.arange(n) / SR
+    thud_hz = np.linspace(240.0, 48.0, n)
+    thud = np.sin(2.0 * math.pi * np.cumsum(thud_hz) / SR) * np.exp(-t * 26.0)
+    slap = highpass(noise(n), 900.0) * np.exp(-t * 42.0)
+    meat = sine(n, np.linspace(420.0, 70.0, n)) * np.exp(-t * 20.0)
+    click = highpass(noise(n), 3500.0) * np.exp(-t * 85.0)
+    out = thud * 0.95 + slap * 0.55 + meat * 0.32 + click * 0.18
+    peak = np.max(np.abs(out)) or 1.0
+    return out / peak * 0.94
+
+
 def main() -> None:
     write_wav(ROOT / "assets" / "sfx" / "swoosh.wav", make_swoosh())
+    write_wav(ROOT / "assets" / "sfx" / "punch.wav", make_punch())
     write_wav(ROOT / "assets" / "music" / "brooklyn_fight.wav", make_music())
 
 

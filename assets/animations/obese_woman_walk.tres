@@ -1,0 +1,164 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://dp8itdpdw23qk"]
+
+[ext_resource type="Texture2D" uid="uid://coomv7dvjmkel" path="res://assets/spritesheets/obese_woman_walk_spritesheet.png" id="1_sheet"]
+
+[sub_resource type="AtlasTexture" id="walk_0"]
+atlas = ExtResource("1_sheet")
+region = Rect2(0, 0, 100, 128)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="walk_7"]
+atlas = ExtResource("1_sheet")
+region = Rect2(700, 0, 100, 128)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="walk_8"]
+atlas = ExtResource("1_sheet")
+region = Rect2(800, 0, 100, 128)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="walk_9"]
+atlas = ExtResource("1_sheet")
+region = Rect2(900, 0, 100, 128)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="walk_10"]
+atlas = ExtResource("1_sheet")
+region = Rect2(1000, 0, 100, 128)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="walk_1"]
+atlas = ExtResource("1_sheet")
+region = Rect2(100, 0, 100, 128)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="walk_2"]
+atlas = ExtResource("1_sheet")
+region = Rect2(200, 0, 100, 128)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="walk_3"]
+atlas = ExtResource("1_sheet")
+region = Rect2(300, 0, 100, 128)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="walk_4"]
+atlas = ExtResource("1_sheet")
+region = Rect2(400, 0, 100, 128)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="walk_5"]
+atlas = ExtResource("1_sheet")
+region = Rect2(500, 0, 100, 128)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="walk_6"]
+atlas = ExtResource("1_sheet")
+region = Rect2(600, 0, 100, 128)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="walk_11"]
+atlas = ExtResource("1_sheet")
+region = Rect2(1100, 0, 100, 128)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="walk_12"]
+atlas = ExtResource("1_sheet")
+region = Rect2(1200, 0, 100, 128)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="walk_13"]
+atlas = ExtResource("1_sheet")
+region = Rect2(1300, 0, 100, 128)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="walk_14"]
+atlas = ExtResource("1_sheet")
+region = Rect2(1400, 0, 100, 128)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="walk_15"]
+atlas = ExtResource("1_sheet")
+region = Rect2(1500, 0, 100, 128)
+filter_clip = true
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("walk_0")
+}],
+"loop": 1,
+"name": &"idle",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("walk_7")
+}, {
+"duration": 1.0,
+"texture": SubResource("walk_8")
+}, {
+"duration": 1.0,
+"texture": SubResource("walk_9")
+}, {
+"duration": 1.0,
+"texture": SubResource("walk_10")
+}],
+"loop": 0,
+"name": &"strike",
+"speed": 16.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("walk_0")
+}, {
+"duration": 1.0,
+"texture": SubResource("walk_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("walk_2")
+}, {
+"duration": 1.0,
+"texture": SubResource("walk_3")
+}, {
+"duration": 1.0,
+"texture": SubResource("walk_4")
+}, {
+"duration": 1.0,
+"texture": SubResource("walk_5")
+}, {
+"duration": 1.0,
+"texture": SubResource("walk_6")
+}, {
+"duration": 1.0,
+"texture": SubResource("walk_7")
+}, {
+"duration": 1.0,
+"texture": SubResource("walk_8")
+}, {
+"duration": 1.0,
+"texture": SubResource("walk_9")
+}, {
+"duration": 1.0,
+"texture": SubResource("walk_10")
+}, {
+"duration": 1.0,
+"texture": SubResource("walk_11")
+}, {
+"duration": 1.0,
+"texture": SubResource("walk_12")
+}, {
+"duration": 1.0,
+"texture": SubResource("walk_13")
+}, {
+"duration": 1.0,
+"texture": SubResource("walk_14")
+}, {
+"duration": 1.0,
+"texture": SubResource("walk_15")
+}],
+"loop": 1,
+"name": &"walk",
+"speed": 14.0
+}]

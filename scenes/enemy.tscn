@@ -1,0 +1,51 @@
+[gd_scene format=3 uid="uid://bq8enemywalk01"]
+
+[ext_resource type="Script" uid="uid://c3wr8hj5t1v6f" path="res://scripts/enemy.gd" id="1_script"]
+[ext_resource type="SpriteFrames" uid="uid://dtssg4l2y767g" path="res://assets/animations/muslim_walk.tres" id="2_frames"]
+[ext_resource type="AudioStream" uid="uid://s3dxlbrtdxgx" path="res://assets/sfx/swoosh.wav" id="3_swoosh"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
+size = Vector2(36, 90)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hit"]
+size = Vector2(64, 72)
+
+[node name="Enemy" type="CharacterBody2D" groups=["enemies"]]
+z_index = 1
+scale = Vector2(2, 2)
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("1_script")
+max_hits = 3
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+sprite_frames = ExtResource("2_frames")
+animation = &"idle"
+autoplay = "idle"
+flip_h = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_body")
+
+[node name="Swoosh" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_swoosh")
+volume_db = -2.0
+
+[node name="Hurtbox" type="Area2D" parent="."]
+collision_layer = 16
+collision_mask = 0
+monitoring = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
+shape = SubResource("RectangleShape2D_body")
+
+[node name="Hitbox" type="Area2D" parent="."]
+position = Vector2(-58, 0)
+collision_layer = 0
+collision_mask = 8
+monitoring = false
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+shape = SubResource("RectangleShape2D_hit")

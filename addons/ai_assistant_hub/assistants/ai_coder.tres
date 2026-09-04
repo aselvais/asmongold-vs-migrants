@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="AIAssistantResource" format=3 uid="uid://cky7wyyjqlfwb"]
+
+[ext_resource type="Resource" uid="uid://c0xq2vafep0gu" path="res://addons/ai_assistant_hub/llm_providers/ollama.tres" id="1_wmu8k"]
+[ext_resource type="Script" uid="uid://elqbtcvf45vc" path="res://addons/ai_assistant_hub/quick_prompts/ai_quick_prompt_resource.gd" id="2_d7b6o"]
+[ext_resource type="Script" uid="uid://dll3sx8dtya3f" path="res://addons/ai_assistant_hub/assistants/ai_assistant_resource.gd" id="3_cor7a"]
+[ext_resource type="Script" uid="uid://bkf1rsjmq6gjq" path="res://addons/ai_assistant_hub/tools/ai_tool_access_profile.gd" id="4_d7b6o"]
+
+[sub_resource type="Resource" id="Resource_cor7a"]
+script = ExtResource("2_d7b6o")
+
+[sub_resource type="Resource" id="Resource_odvsl"]
+script = ExtResource("4_d7b6o")
+
+[resource]
+script = ExtResource("3_cor7a")
+type_name = "coder"
+ai_model = "qwen2.5-coder:14b"
+llm_provider = ExtResource("1_wmu8k")
+quick_prompts = Array[ExtResource("2_d7b6o")]([SubResource("Resource_cor7a")])
+tool_access = SubResource("Resource_odvsl")

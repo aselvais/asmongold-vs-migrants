@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://ciglnp02rnj3e"]
+[gd_scene format=3 uid="uid://i2rmog714elm"]
 
 [ext_resource type="Script" uid="uid://cluy0d660gxss" path="res://scripts/player.gd" id="1_0wfyh"]
 [ext_resource type="Texture2D" uid="uid://clbwamjo5tv8l" path="res://assets/backgrounds/brooklyn_street.png" id="1_sugp2"]
@@ -6,7 +6,18 @@
 [ext_resource type="SpriteFrames" uid="uid://b213wslclyy22" path="res://assets/animations/asmongold_frames.tres" id="2_sugp2"]
 [ext_resource type="AudioStream" uid="uid://s3dxlbrtdxgx" path="res://assets/sfx/swoosh.wav" id="4_tbgi4"]
 [ext_resource type="AudioStream" uid="uid://chq74g8fikgrw" path="res://assets/music/QuarterCoinRiot.mp3" id="6_tefeu"]
-[ext_resource type="Script" uid="uid://c3wr8hj5t1v6f" path="res://scripts/enemy.gd" id="7_enemy"]
+[ext_resource type="PackedScene" uid="uid://y3cpv1mwx653" path="res://scenes/enemy.tscn" id="8_enemy"]
+[ext_resource type="SpriteFrames" uid="uid://dtssg4l2y767g" path="res://assets/animations/muslim_walk.tres" id="9_muslim"]
+[ext_resource type="SpriteFrames" uid="uid://dmux3sptndjj1" path="res://assets/animations/slim_pakistani_walk.tres" id="10_pakistani"]
+[ext_resource type="SpriteFrames" uid="uid://cy5ab6lx4w7u0" path="res://assets/animations/young_man_walk.tres" id="11_youngman"]
+[ext_resource type="SpriteFrames" uid="uid://d30cn3fudrs4p" path="res://assets/animations/slim_black_walk.tres" id="12_black"]
+[ext_resource type="SpriteFrames" uid="uid://b1xgbsqnsekg" path="res://assets/animations/slim_black2_walk.tres" id="13_black2"]
+[ext_resource type="SpriteFrames" uid="uid://bxn2siong521w" path="res://assets/animations/young_slim_walk.tres" id="14_youngslim"]
+[ext_resource type="SpriteFrames" uid="uid://cdhlj0hfejp7y" path="res://assets/animations/small_figure_walk.tres" id="15_small"]
+[ext_resource type="SpriteFrames" uid="uid://b37dxtewgo7pi" path="res://assets/animations/middleaged_white_walk.tres" id="16_middle"]
+[ext_resource type="SpriteFrames" uid="uid://dp8itdpdw23qk" path="res://assets/animations/obese_woman_walk.tres" id="17_obese"]
+[ext_resource type="Script" uid="uid://cc4q15kny5y0m" path="res://scripts/hud.gd" id="18_hud"]
+[ext_resource type="AudioStream" uid="uid://h01l18j063in" path="res://assets/sfx/punch.wav" id="20_punch"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jyhfs"]
 size = Vector2(36, 90)
@@ -44,63 +55,83 @@ shape = SubResource("RectangleShape2D_jyhfs")
 stream = ExtResource("4_tbgi4")
 volume_db = -2.0
 
-[node name="Hurtbox" type="Area2D" parent="Player"]
+[node name="Hurtbox" type="Area2D" parent="Player" unique_id=262293105]
 collision_layer = 8
 collision_mask = 0
 monitoring = false
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Player/Hurtbox"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player/Hurtbox" unique_id=380877873]
 shape = SubResource("RectangleShape2D_jyhfs")
 
-[node name="Hitbox" type="Area2D" parent="Player"]
+[node name="Hitbox" type="Area2D" parent="Player" unique_id=1020358347]
 position = Vector2(58, 0)
 collision_layer = 0
 collision_mask = 16
 monitoring = false
 monitorable = false
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Player/Hitbox"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player/Hitbox" unique_id=1892077281]
 shape = SubResource("RectangleShape2D_hit")
 
-[node name="Enemy" type="CharacterBody2D" parent="." groups=["enemies"]]
-z_index = 1
-position = Vector2(980, 820)
-scale = Vector2(2, 2)
-collision_layer = 2
-collision_mask = 0
-script = ExtResource("7_enemy")
+[node name="Enemies" type="Node2D" parent="." unique_id=1261467995]
+y_sort_enabled = true
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Enemy"]
-texture_filter = 1
-sprite_frames = ExtResource("2_sugp2")
-animation = &"idle"
-autoplay = "idle"
-flip_h = true
+[node name="Muslim" parent="Enemies" unique_id=1703665326 instance=ExtResource("8_enemy")]
+position = Vector2(1180, 820)
+sprite_frames_override = ExtResource("9_muslim")
+walk_speed = 250.0
+strike_sfx_on_start = false
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Enemy"]
-shape = SubResource("RectangleShape2D_jyhfs")
+[node name="Swoosh" parent="Enemies/Muslim" index="2"]
+stream = ExtResource("20_punch")
 
-[node name="Swoosh" type="AudioStreamPlayer" parent="Enemy"]
-stream = ExtResource("4_tbgi4")
-volume_db = -2.0
+[node name="Pakistani" parent="Enemies" unique_id=1021042583 instance=ExtResource("8_enemy")]
+position = Vector2(1760, 760)
+sprite_frames_override = ExtResource("10_pakistani")
+walk_speed = 250.0
+score_value = 150
 
-[node name="Hurtbox" type="Area2D" parent="Enemy"]
-collision_layer = 16
-collision_mask = 0
-monitoring = false
+[node name="YoungMan" parent="Enemies" unique_id=994137281 instance=ExtResource("8_enemy")]
+position = Vector2(1980, 850)
+sprite_frames_override = ExtResource("11_youngman")
+walk_speed = 270.0
+score_value = 200
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Enemy/Hurtbox"]
-shape = SubResource("RectangleShape2D_jyhfs")
+[node name="KnifeGuy" parent="Enemies" unique_id=1054779095 instance=ExtResource("8_enemy")]
+position = Vector2(2240, 790)
+sprite_frames_override = ExtResource("12_black")
+walk_speed = 280.0
+score_value = 250
 
-[node name="Hitbox" type="Area2D" parent="Enemy"]
-position = Vector2(-58, 0)
-collision_layer = 0
-collision_mask = 8
-monitoring = false
-monitorable = false
+[node name="StickGuy" parent="Enemies" unique_id=1663429031 instance=ExtResource("8_enemy")]
+position = Vector2(2580, 840)
+sprite_frames_override = ExtResource("13_black2")
+walk_speed = 270.0
+score_value = 300
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Enemy/Hitbox"]
-shape = SubResource("RectangleShape2D_hit")
+[node name="YoungSlim" parent="Enemies" unique_id=2058919636 instance=ExtResource("8_enemy")]
+position = Vector2(3360, 770)
+sprite_frames_override = ExtResource("14_youngslim")
+walk_speed = 190.0
+score_value = 350
+
+[node name="SmallFigure" parent="Enemies" unique_id=648098828 instance=ExtResource("8_enemy")]
+position = Vector2(3720, 830)
+sprite_frames_override = ExtResource("15_small")
+walk_speed = 220.0
+score_value = 400
+
+[node name="MiddleagedWhite" parent="Enemies" unique_id=692179274 instance=ExtResource("8_enemy")]
+position = Vector2(4680, 800)
+sprite_frames_override = ExtResource("16_middle")
+walk_speed = 210.0
+score_value = 450
+
+[node name="ObeseWoman" parent="Enemies" unique_id=1890228165 instance=ExtResource("8_enemy")]
+position = Vector2(5100, 860)
+sprite_frames_override = ExtResource("17_obese")
+walk_speed = 170.0
+score_value = 500
 
 [node name="Music" type="AudioStreamPlayer" parent="." unique_id=856043903]
 stream = ExtResource("6_tefeu")
@@ -114,10 +145,101 @@ limit_top = 0
 limit_right = 6400
 limit_bottom = 1024
 
-[node name="HUD" type="CanvasLayer" parent="."]
+[node name="HUD" type="CanvasLayer" parent="." unique_id=1720107209]
 process_mode = 3
 
-[node name="GameOver" type="Control" parent="HUD"]
+[node name="Status" type="Control" parent="HUD" unique_id=2012480516]
+layout_mode = 3
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 118.0
+grow_horizontal = 2
+mouse_filter = 2
+script = ExtResource("18_hud")
+
+[node name="Backdrop" type="ColorRect" parent="HUD/Status" unique_id=187591777]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0.62)
+
+[node name="Margin" type="MarginContainer" parent="HUD/Status" unique_id=197285626]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 28
+theme_override_constants/margin_bottom = 10
+
+[node name="Row" type="HBoxContainer" parent="HUD/Status/Margin" unique_id=86282216]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="PlayerBlock" type="VBoxContainer" parent="HUD/Status/Margin/Row" unique_id=524289216]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Name" type="Label" parent="HUD/Status/Margin/Row/PlayerBlock" unique_id=1764729355]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.2, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 16
+text = "ASMONGOLD"
+
+[node name="HealthBar" type="ProgressBar" parent="HUD/Status/Margin/Row/PlayerBlock" unique_id=852107544]
+custom_minimum_size = Vector2(360, 24)
+layout_mode = 2
+max_value = 5.0
+value = 5.0
+show_percentage = false
+
+[node name="Lives" type="Label" parent="HUD/Status/Margin/Row/PlayerBlock" unique_id=598033696]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.2, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 16
+text = "LIVES x 3"
+
+[node name="Spacer" type="Control" parent="HUD/Status/Margin/Row" unique_id=339934621]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="ScoreBlock" type="VBoxContainer" parent="HUD/Status/Margin/Row" unique_id=1112011875]
+layout_mode = 2
+theme_override_constants/separation = 2
+alignment = 2
+
+[node name="ScoreTitle" type="Label" parent="HUD/Status/Margin/Row/ScoreBlock" unique_id=516996711]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.2, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 16
+text = "SCORE"
+horizontal_alignment = 2
+
+[node name="ScoreValue" type="Label" parent="HUD/Status/Margin/Row/ScoreBlock" unique_id=688838286]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 24
+text = "000000"
+horizontal_alignment = 2
+
+[node name="GameOver" type="Control" parent="HUD" unique_id=1249200706]
 visible = false
 layout_mode = 3
 anchors_preset = 15
@@ -126,7 +248,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Dim" type="ColorRect" parent="HUD/GameOver"]
+[node name="Dim" type="ColorRect" parent="HUD/GameOver" unique_id=1999796422]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -135,7 +257,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0.72)
 
-[node name="VBox" type="VBoxContainer" parent="HUD/GameOver"]
+[node name="VBox" type="VBoxContainer" parent="HUD/GameOver" unique_id=1534248059]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -151,18 +273,18 @@ grow_vertical = 2
 theme_override_constants/separation = 32
 alignment = 1
 
-[node name="Title" type="Label" parent="HUD/GameOver/VBox"]
+[node name="Title" type="Label" parent="HUD/GameOver/VBox" unique_id=1135852185]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.18, 0.18, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 12
-theme_override_font_sizes/font_size = 72
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 40
 text = "GAME OVER"
 horizontal_alignment = 1
 
-[node name="TryAgain" type="Button" parent="HUD/GameOver/VBox"]
+[node name="TryAgain" type="Button" parent="HUD/GameOver/VBox" unique_id=2107667628]
 custom_minimum_size = Vector2(280, 64)
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_font_sizes/font_size = 28
+theme_override_font_sizes/font_size = 16
 text = "TRY AGAIN"
