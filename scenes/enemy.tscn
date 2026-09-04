@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://bq8enemywalk01"]
+[gd_scene format=3 uid="uid://y3cpv1mwx653"]
 
 [ext_resource type="Script" uid="uid://c3wr8hj5t1v6f" path="res://scripts/enemy.gd" id="1_script"]
 [ext_resource type="SpriteFrames" uid="uid://dtssg4l2y767g" path="res://assets/animations/muslim_walk.tres" id="2_frames"]
@@ -10,7 +10,7 @@ size = Vector2(36, 90)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hit"]
 size = Vector2(64, 72)
 
-[node name="Enemy" type="CharacterBody2D" groups=["enemies"]]
+[node name="Enemy" type="CharacterBody2D" unique_id=1709838528 groups=["enemies"]]
 z_index = 1
 scale = Vector2(2, 2)
 collision_layer = 2
@@ -18,34 +18,34 @@ collision_mask = 0
 script = ExtResource("1_script")
 max_hits = 3
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1541460159]
 texture_filter = 1
 sprite_frames = ExtResource("2_frames")
 animation = &"idle"
 autoplay = "idle"
 flip_h = true
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1163572942]
 shape = SubResource("RectangleShape2D_body")
 
-[node name="Swoosh" type="AudioStreamPlayer" parent="."]
+[node name="Swoosh" type="AudioStreamPlayer" parent="." unique_id=1910627943]
 stream = ExtResource("3_swoosh")
 volume_db = -2.0
 
-[node name="Hurtbox" type="Area2D" parent="."]
+[node name="Hurtbox" type="Area2D" parent="." unique_id=804099983]
 collision_layer = 16
 collision_mask = 0
 monitoring = false
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=895510745]
 shape = SubResource("RectangleShape2D_body")
 
-[node name="Hitbox" type="Area2D" parent="."]
+[node name="Hitbox" type="Area2D" parent="." unique_id=1659119205]
 position = Vector2(-58, 0)
 collision_layer = 0
 collision_mask = 8
 monitoring = false
 monitorable = false
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=1874172715]
 shape = SubResource("RectangleShape2D_hit")

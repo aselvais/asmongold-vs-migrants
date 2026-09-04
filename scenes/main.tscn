@@ -17,7 +17,6 @@
 [ext_resource type="SpriteFrames" uid="uid://b37dxtewgo7pi" path="res://assets/animations/middleaged_white_walk.tres" id="16_middle"]
 [ext_resource type="SpriteFrames" uid="uid://dp8itdpdw23qk" path="res://assets/animations/obese_woman_walk.tres" id="17_obese"]
 [ext_resource type="Script" uid="uid://cc4q15kny5y0m" path="res://scripts/hud.gd" id="18_hud"]
-[ext_resource type="AudioStream" uid="uid://h01l18j063in" path="res://assets/sfx/punch.wav" id="20_punch"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jyhfs"]
 size = Vector2(36, 90)
@@ -80,58 +79,64 @@ y_sort_enabled = true
 position = Vector2(1180, 820)
 sprite_frames_override = ExtResource("9_muslim")
 walk_speed = 250.0
+strike_speech = "Allahu Akbar"
 strike_sfx_on_start = false
-
-[node name="Swoosh" parent="Enemies/Muslim" index="2"]
-stream = ExtResource("20_punch")
 
 [node name="Pakistani" parent="Enemies" unique_id=1021042583 instance=ExtResource("8_enemy")]
 position = Vector2(1760, 760)
 sprite_frames_override = ExtResource("10_pakistani")
 walk_speed = 250.0
 score_value = 150
+strike_speech = "I'm gonna r*pe you!"
 
 [node name="YoungMan" parent="Enemies" unique_id=994137281 instance=ExtResource("8_enemy")]
 position = Vector2(1980, 850)
 sprite_frames_override = ExtResource("11_youngman")
 walk_speed = 270.0
 score_value = 200
+strike_speech = "Wanna buy some weed?"
 
 [node name="KnifeGuy" parent="Enemies" unique_id=1054779095 instance=ExtResource("8_enemy")]
 position = Vector2(2240, 790)
 sprite_frames_override = ExtResource("12_black")
 walk_speed = 280.0
 score_value = 250
+strike_speech = "Karmelo was innocent!"
 
 [node name="StickGuy" parent="Enemies" unique_id=1663429031 instance=ExtResource("8_enemy")]
 position = Vector2(2580, 840)
 sprite_frames_override = ExtResource("13_black2")
 walk_speed = 270.0
 score_value = 300
+strike_speech = "Give me free housing!"
 
 [node name="YoungSlim" parent="Enemies" unique_id=2058919636 instance=ExtResource("8_enemy")]
 position = Vector2(3360, 770)
 sprite_frames_override = ExtResource("14_youngslim")
 walk_speed = 190.0
 score_value = 350
+strike_speech = "Racism did that to me!"
 
 [node name="SmallFigure" parent="Enemies" unique_id=648098828 instance=ExtResource("8_enemy")]
 position = Vector2(3720, 830)
 sprite_frames_override = ExtResource("15_small")
 walk_speed = 220.0
 score_value = 400
+strike_speech = "Women all have to dress like me!"
 
 [node name="MiddleagedWhite" parent="Enemies" unique_id=692179274 instance=ExtResource("8_enemy")]
 position = Vector2(4680, 800)
 sprite_frames_override = ExtResource("16_middle")
 walk_speed = 210.0
 score_value = 450
+strike_speech = "What are you doing? I am just going to work..."
 
 [node name="ObeseWoman" parent="Enemies" unique_id=1890228165 instance=ExtResource("8_enemy")]
 position = Vector2(5100, 860)
 sprite_frames_override = ExtResource("17_obese")
 walk_speed = 170.0
 score_value = 500
+strike_speech = "No one is illegal on stolen land!"
 
 [node name="Music" type="AudioStreamPlayer" parent="." unique_id=856043903]
 stream = ExtResource("6_tefeu")

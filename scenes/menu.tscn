@@ -1,11 +1,15 @@
-[gd_scene format=3 uid="uid://bmenuasmongold1"]
+[gd_scene format=3 uid="uid://ddmsvrfmpr4hc"]
 
 [ext_resource type="Script" uid="uid://cuombtfk3ub20" path="res://scripts/menu.gd" id="1_menu"]
 [ext_resource type="Texture2D" uid="uid://clbwamjo5tv8l" path="res://assets/backgrounds/brooklyn_street.png" id="2_bg"]
-[ext_resource type="Theme" uid="uid://barcadetheme01" path="res://assets/ui/arcade_theme.tres" id="3_theme"]
+[ext_resource type="Theme" uid="uid://dt2bmxhgu0exw" path="res://assets/ui/arcade_theme.tres" id="3_theme"]
 [ext_resource type="AudioStream" uid="uid://d0k6a08q13rl4" path="res://assets/music/MenuLoop.mp3" id="4_music"]
 
 [sub_resource type="StyleBoxFlat" id="play_normal"]
+content_margin_left = 28.0
+content_margin_top = 12.0
+content_margin_right = 28.0
+content_margin_bottom = 12.0
 bg_color = Color(0.75, 0.12, 0.12, 1)
 border_width_left = 3
 border_width_top = 3
@@ -16,28 +20,12 @@ corner_radius_top_left = 4
 corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
-content_margin_left = 28
-content_margin_top = 12
-content_margin_right = 28
-content_margin_bottom = 12
-
-[sub_resource type="StyleBoxFlat" id="play_hover"]
-bg_color = Color(0.92, 0.18, 0.16, 1)
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
-border_color = Color(1, 0.92, 0.35, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
-content_margin_left = 28
-content_margin_top = 12
-content_margin_right = 28
-content_margin_bottom = 12
 
 [sub_resource type="StyleBoxFlat" id="play_pressed"]
+content_margin_left = 28.0
+content_margin_top = 12.0
+content_margin_right = 28.0
+content_margin_bottom = 12.0
 bg_color = Color(0.55, 0.08, 0.08, 1)
 border_width_left = 3
 border_width_top = 3
@@ -48,12 +36,24 @@ corner_radius_top_left = 4
 corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
-content_margin_left = 28
-content_margin_top = 12
-content_margin_right = 28
-content_margin_bottom = 12
 
-[node name="Menu" type="Control"]
+[sub_resource type="StyleBoxFlat" id="play_hover"]
+content_margin_left = 28.0
+content_margin_top = 12.0
+content_margin_right = 28.0
+content_margin_bottom = 12.0
+bg_color = Color(0.92, 0.18, 0.16, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 0.92, 0.35, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="Menu" type="Control" unique_id=1380366355]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -63,7 +63,7 @@ grow_vertical = 2
 theme = ExtResource("3_theme")
 script = ExtResource("1_menu")
 
-[node name="Background" type="TextureRect" parent="."]
+[node name="Background" type="TextureRect" parent="." unique_id=691710235]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -74,7 +74,7 @@ texture = ExtResource("2_bg")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="Dim" type="ColorRect" parent="."]
+[node name="Dim" type="ColorRect" parent="." unique_id=829939084]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -83,7 +83,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0.58)
 
-[node name="Center" type="CenterContainer" parent="."]
+[node name="Center" type="CenterContainer" parent="." unique_id=436520508]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -91,40 +91,42 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBox" type="VBoxContainer" parent="Center"]
+[node name="VBox" type="VBoxContainer" parent="Center" unique_id=1940287609]
 layout_mode = 2
 theme_override_constants/separation = 48
 alignment = 1
 
-[node name="Title" type="Label" parent="Center/VBox"]
+[node name="Title" type="Label" parent="Center/VBox" unique_id=392499577]
 custom_minimum_size = Vector2(1000, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.85, 0.2, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 8
-theme_override_font_sizes/font_size = 32
-text = "ASMONGOLD VS THE MIGRANTS"
+theme_override_font_sizes/font_size = 60
+text = "ASMONGOLD
+VS
+MIGRANTS"
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
 
-[node name="Play" type="Button" parent="Center/VBox"]
+[node name="Play" type="Button" parent="Center/VBox" unique_id=913773777]
 custom_minimum_size = Vector2(280, 72)
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_hover_color = Color(1, 0.95, 0.7, 1)
 theme_override_colors/font_pressed_color = Color(1, 0.85, 0.2, 1)
+theme_override_colors/font_hover_color = Color(1, 0.95, 0.7, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 4
 theme_override_font_sizes/font_size = 24
 theme_override_styles/normal = SubResource("play_normal")
-theme_override_styles/hover = SubResource("play_hover")
 theme_override_styles/pressed = SubResource("play_pressed")
+theme_override_styles/hover = SubResource("play_hover")
 theme_override_styles/focus = SubResource("play_hover")
 text = "PLAY"
 
-[node name="Music" type="AudioStreamPlayer" parent="."]
+[node name="Music" type="AudioStreamPlayer" parent="." unique_id=1141412417]
 stream = ExtResource("4_music")
 volume_db = -8.0
 autoplay = true
