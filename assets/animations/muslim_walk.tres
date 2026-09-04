@@ -8,41 +8,6 @@ atlas = ExtResource("1_sheet")
 region = Rect2(0, 0, 64, 128)
 filter_clip = true
 
-[sub_resource type="AtlasTexture" id="walk_1"]
-atlas = ExtResource("1_sheet")
-region = Rect2(64, 0, 64, 128)
-filter_clip = true
-
-[sub_resource type="AtlasTexture" id="walk_2"]
-atlas = ExtResource("1_sheet")
-region = Rect2(128, 0, 64, 128)
-filter_clip = true
-
-[sub_resource type="AtlasTexture" id="walk_3"]
-atlas = ExtResource("1_sheet")
-region = Rect2(192, 0, 64, 128)
-filter_clip = true
-
-[sub_resource type="AtlasTexture" id="walk_4"]
-atlas = ExtResource("1_sheet")
-region = Rect2(256, 0, 64, 128)
-filter_clip = true
-
-[sub_resource type="AtlasTexture" id="walk_5"]
-atlas = ExtResource("1_sheet")
-region = Rect2(320, 0, 64, 128)
-filter_clip = true
-
-[sub_resource type="AtlasTexture" id="walk_6"]
-atlas = ExtResource("1_sheet")
-region = Rect2(384, 0, 64, 128)
-filter_clip = true
-
-[sub_resource type="AtlasTexture" id="walk_7"]
-atlas = ExtResource("1_sheet")
-region = Rect2(448, 0, 64, 128)
-filter_clip = true
-
 [sub_resource type="AtlasTexture" id="pray_0"]
 atlas = ExtResource("2_pray")
 region = Rect2(0, 0, 128, 128)
@@ -81,6 +46,41 @@ filter_clip = true
 [sub_resource type="AtlasTexture" id="pray_7"]
 atlas = ExtResource("2_pray")
 region = Rect2(896, 0, 128, 128)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="walk_1"]
+atlas = ExtResource("1_sheet")
+region = Rect2(64, 0, 64, 128)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="walk_2"]
+atlas = ExtResource("1_sheet")
+region = Rect2(128, 0, 64, 128)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="walk_3"]
+atlas = ExtResource("1_sheet")
+region = Rect2(192, 0, 64, 128)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="walk_4"]
+atlas = ExtResource("1_sheet")
+region = Rect2(256, 0, 64, 128)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="walk_5"]
+atlas = ExtResource("1_sheet")
+region = Rect2(320, 0, 64, 128)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="walk_6"]
+atlas = ExtResource("1_sheet")
+region = Rect2(384, 0, 64, 128)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="walk_7"]
+atlas = ExtResource("1_sheet")
+region = Rect2(448, 0, 64, 128)
 filter_clip = true
 
 [resource]

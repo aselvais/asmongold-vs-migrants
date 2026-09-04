@@ -16,6 +16,7 @@ const BANNER_FADE := 0.8
 @onready var game_over: Control = $HUD/GameOver
 @onready var try_again: Button = $HUD/GameOver/VBox/TryAgain
 @onready var level_banner: Label = $HUD/LevelBanner
+@onready var pause_menu: PauseMenu = $HUD/Pause
 @onready var stairs: Marker2D = $SubwayStairs
 
 var score := 0
@@ -37,6 +38,9 @@ func _ready() -> void:
 		player.health_changed.connect(_on_player_health_changed)
 	if not try_again.pressed.is_connected(_on_try_again):
 		try_again.pressed.connect(_on_try_again)
+	if pause_menu:
+		pause_menu.can_pause = true
+		pause_menu.hide()
 	_connect_enemies()
 	_refresh_hud()
 	_show_level_banner()
@@ -106,6 +110,7 @@ func _on_player_died() -> void:
 		hud.set_lives(lives, START_LIVES)
 	if lives <= 0:
 		player.sprite.visible = true
+		_disable_pause()
 		game_over.show()
 		try_again.grab_focus()
 		get_tree().paused = true
@@ -119,10 +124,18 @@ func _on_try_again() -> void:
 	get_tree().reload_current_scene()
 
 
+func _disable_pause() -> void:
+	if pause_menu == null:
+		return
+	pause_menu.can_pause = false
+	pause_menu.hide()
+
+
 func _start_exit() -> void:
 	if _exiting:
 		return
 	_exiting = true
+	_disable_pause()
 	if music.finished.is_connected(music.play):
 		music.finished.disconnect(music.play)
 	music.stop()

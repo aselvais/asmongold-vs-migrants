@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://cuombtfk3ub20" path="res://scripts/menu.gd" id="1_menu"]
 [ext_resource type="Texture2D" uid="uid://clbwamjo5tv8l" path="res://assets/backgrounds/brooklyn_street.png" id="2_bg"]
 [ext_resource type="Theme" uid="uid://barcadetheme01" path="res://assets/ui/arcade_theme.tres" id="3_theme"]
+[ext_resource type="AudioStream" uid="uid://d0k6a08q13rl4" path="res://assets/music/MenuLoop.mp3" id="4_music"]
 
 [sub_resource type="StyleBoxFlat" id="play_normal"]
 bg_color = Color(0.75, 0.12, 0.12, 1)
@@ -122,3 +123,8 @@ theme_override_styles/hover = SubResource("play_hover")
 theme_override_styles/pressed = SubResource("play_pressed")
 theme_override_styles/focus = SubResource("play_hover")
 text = "PLAY"
+
+[node name="Music" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_music")
+volume_db = -8.0
+autoplay = true

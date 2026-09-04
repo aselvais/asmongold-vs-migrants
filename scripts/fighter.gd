@@ -18,6 +18,7 @@ signal health_changed(current: int, maximum: int)
 
 @export var max_hits: int = MAX_HITS
 @export var strike_sfx_on_start: bool = true
+@export var strike_stream: AudioStream
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var swoosh: AudioStreamPlayer = $Swoosh
@@ -33,6 +34,8 @@ var _hit_this_strike: Dictionary = {}
 
 
 func _ready() -> void:
+	if strike_stream and swoosh:
+		swoosh.stream = strike_stream
 	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	if not sprite.animation_finished.is_connected(_on_animation_finished):
 		sprite.animation_finished.connect(_on_animation_finished)
