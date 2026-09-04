@@ -12,11 +12,19 @@ const SPEECH_DURATION := 1.5
 const SPEECH_MAX_WIDTH := 220.0
 const SPEECH_FILL := Color(1.0, 1.0, 0.94)
 const SPEECH_BORDER := Color(0.08, 0.08, 0.1)
+const SCORE_POPUP_DURATION := 1.0
+const SCORE_POPUP_RISE := 80.0
+const SCORE_POSITIVE := Color(0.22, 0.92, 0.28, 1)
+const SCORE_NEGATIVE := Color(0.95, 0.16, 0.12, 1)
+const SCORE_FONT := preload("res://assets/fonts/PressStart2P-Regular.ttf")
+
+signal scored(points: int)
 
 @export var sprite_frames_override: SpriteFrames
 @export var walk_speed: float = 240.0
 @export var score_value: int = 100
 @export var strike_speech: String = ""
+@export var can_attack: bool = true
 
 var _cooldown := 0.8
 var _player: Node2D
@@ -55,7 +63,7 @@ func _physics_process(delta: float) -> void:
 		_apply_move(Vector2.ZERO)
 		return
 
-	if _player == null or not is_instance_valid(_player) or bool(_player.get("dead")):
+	if _player == null or not is_instance_valid(_player) or bool(_player.get("dead")) or not can_attack:
 		_wander(delta)
 		return
 
@@ -119,6 +127,8 @@ func _pick_wander() -> void:
 
 
 func _setup_speech_bubble() -> void:
+	if not GameSettings.OFFENCIVE_MODE:
+		return
 	if strike_speech.is_empty():
 		return
 
@@ -218,6 +228,8 @@ func _sync_speech_position() -> void:
 
 
 func _show_strike_speech() -> void:
+	if not GameSettings.OFFENCIVE_MODE:
+		return
 	if _speech == null:
 		return
 	_layout_speech_bubble()
@@ -234,10 +246,62 @@ func _hide_strike_speech() -> void:
 		_speech_timer.stop()
 
 
+func take_hit(from: Node) -> void:
+	if dead or invulnerable:
+		return
+	scored.emit(score_value)
+	_spawn_score_popup()
+	if _speaks_on_hit():
+		_show_strike_speech()
+	await super.take_hit(from)
+
+
 func start_strike() -> void:
+	if not can_attack:
+		return
 	super.start_strike()
 	if striking:
 		_show_strike_speech()
+
+
+func _speaks_on_hit() -> bool:
+	return not can_attack and score_value < 0 and not strike_speech.is_empty()
+
+
+func _spawn_score_popup() -> void:
+	var tree := get_tree()
+	if tree == null or tree.current_scene == null:
+		return
+
+	var popup := Node2D.new()
+	popup.name = "ScorePopup"
+	popup.z_as_relative = false
+	popup.z_index = 4096
+	tree.current_scene.add_child(popup)
+
+	var height := _frame_height(&"idle", 0) * scale.y
+	popup.global_position = global_position + Vector2(52.0, -height * 0.42)
+
+	var label := Label.new()
+	label.text = "%+d" % score_value
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	label.add_theme_font_override("font", SCORE_FONT)
+	label.add_theme_font_size_override("font_size", 20)
+	var color := SCORE_POSITIVE if score_value >= 0 else SCORE_NEGATIVE
+	label.add_theme_color_override("font_color", color)
+	label.add_theme_color_override("font_outline_color", Color(0, 0, 0, 1))
+	label.add_theme_constant_override("outline_size", 6)
+	popup.add_child(label)
+	label.reset_size()
+	var size := label.get_combined_minimum_size()
+	label.size = size
+	label.position = Vector2(-size.x * 0.5, -size.y)
+
+	var tween := popup.create_tween()
+	tween.set_parallel(true)
+	tween.tween_property(popup, "global_position:y", popup.global_position.y - SCORE_POPUP_RISE, SCORE_POPUP_DURATION).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tween.tween_property(popup, "modulate:a", 0.0, SCORE_POPUP_DURATION)
+	tween.chain().tween_callback(popup.queue_free)
 
 
 func _die() -> void:

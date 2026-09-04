@@ -31,7 +31,10 @@ func set_lives(lives: int, _maximum: int = 3) -> void:
 
 
 func set_score(score: int) -> void:
-	score_value.text = "%06d" % score
+	if score < 0:
+		score_value.text = "-%06d" % absi(score)
+	else:
+		score_value.text = "%06d" % score
 
 
 func _style_health_bar() -> void:

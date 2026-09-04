@@ -12,6 +12,7 @@ const STRIKE_HIT_END := 5
 const HITBOX_OFFSET_X := 58.0
 const BLINK_COUNT := 2
 const BLINK_STEP := 0.09
+const PUNCH_STREAM := preload("res://assets/sfx/punch.wav")
 
 signal died
 signal health_changed(current: int, maximum: int)
@@ -34,8 +35,7 @@ var _hit_this_strike: Dictionary = {}
 
 
 func _ready() -> void:
-	if strike_stream and swoosh:
-		swoosh.stream = strike_stream
+	_apply_strike_stream()
 	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	if not sprite.animation_finished.is_connected(_on_animation_finished):
 		sprite.animation_finished.connect(_on_animation_finished)
@@ -50,6 +50,17 @@ func _ready() -> void:
 
 func current_health() -> int:
 	return maxi(0, max_hits - hits)
+
+
+func _apply_strike_stream() -> void:
+	if swoosh == null:
+		return
+	if strike_stream:
+		swoosh.stream = strike_stream
+	if GameSettings.OFFENCIVE_MODE:
+		return
+	if swoosh.stream and swoosh.stream.resource_path.ends_with("wakbar.wav"):
+		swoosh.stream = PUNCH_STREAM
 
 
 func start_strike() -> void:

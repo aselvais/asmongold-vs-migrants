@@ -58,10 +58,14 @@ func _physics_process(_delta: float) -> void:
 
 func _connect_enemies() -> void:
 	var enemies := get_tree().get_nodes_in_group("enemies")
-	_enemies_left = enemies.size()
+	_enemies_left = 0
 	for enemy in enemies:
+		if _enemy_counts_for_clear(enemy):
+			_enemies_left += 1
 		if enemy.has_signal("died") and not enemy.died.is_connected(_on_enemy_died):
 			enemy.died.connect(_on_enemy_died.bind(enemy))
+		if enemy.has_signal("scored") and not enemy.scored.is_connected(_on_enemy_scored):
+			enemy.scored.connect(_on_enemy_scored)
 
 
 func _refresh_hud() -> void:
@@ -92,14 +96,21 @@ func _on_player_health_changed(current: int, maximum: int) -> void:
 		hud.set_health(current, maximum)
 
 
-func _on_enemy_died(enemy: Node) -> void:
-	var points := 100
-	if "score_value" in enemy:
-		points = int(enemy.score_value)
+func _on_enemy_scored(points: int) -> void:
 	score += points
 	if hud:
 		hud.set_score(score)
-	_enemies_left = maxi(0, _enemies_left - 1)
+
+
+func _on_enemy_died(enemy: Node) -> void:
+	if _enemy_counts_for_clear(enemy):
+		_enemies_left = maxi(0, _enemies_left - 1)
+
+
+func _enemy_counts_for_clear(enemy: Node) -> bool:
+	if "can_attack" in enemy:
+		return bool(enemy.can_attack)
+	return true
 
 
 func _on_player_died() -> void:

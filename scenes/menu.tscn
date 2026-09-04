@@ -110,7 +110,12 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
 
-[node name="Play" type="Button" parent="Center/VBox" unique_id=913773777]
+[node name="Actions" type="VBoxContainer" parent="Center/VBox" unique_id=694727727]
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="Play" type="Button" parent="Center/VBox/Actions" unique_id=913773777]
 custom_minimum_size = Vector2(280, 72)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -126,7 +131,75 @@ theme_override_styles/hover = SubResource("play_hover")
 theme_override_styles/focus = SubResource("play_hover")
 text = "PLAY"
 
+[node name="OffensiveMode" type="CheckBox" parent="Center/VBox/Actions" unique_id=869861602]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "OFFENSIVE MODE"
+flat = true
+
 [node name="Music" type="AudioStreamPlayer" parent="." unique_id=1141412417]
 stream = ExtResource("4_music")
 volume_db = -8.0
 autoplay = true
+
+[node name="TermsDialog" type="Control" parent="." unique_id=673368919]
+visible = false
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Dim" type="ColorRect" parent="TermsDialog" unique_id=1626029062]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0, 0, 0, 0.72)
+
+[node name="Center" type="CenterContainer" parent="TermsDialog" unique_id=1735383781]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="Panel" type="PanelContainer" parent="TermsDialog/Center" unique_id=904716140]
+custom_minimum_size = Vector2(840, 620)
+layout_mode = 2
+
+[node name="Margin" type="MarginContainer" parent="TermsDialog/Center/Panel" unique_id=1310447304]
+layout_mode = 2
+theme_override_constants/margin_left = 28
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 28
+theme_override_constants/margin_bottom = 24
+
+[node name="VBox" type="VBoxContainer" parent="TermsDialog/Center/Panel/Margin" unique_id=1189392124]
+layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="Title" type="Label" parent="TermsDialog/Center/Panel/Margin/VBox" unique_id=761818515]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.2, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 22
+text = "TERMS AND CONDITIONS"
+horizontal_alignment = 1
+
+[node name="Scroll" type="ScrollContainer" parent="TermsDialog/Center/Panel/Margin/VBox" unique_id=1858107922]
+custom_minimum_size = Vector2(760, 400)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="Body" type="Label" parent="TermsDialog/Center/Panel/Margin/VBox/Scroll" unique_id=1480807341]
+layout_mode = 2
+size_flags_horizontal = 3
+autowrap_mode = 3
+
+[node name="Accept" type="Button" parent="TermsDialog/Center/Panel/Margin/VBox" unique_id=1189935378]
+custom_minimum_size = Vector2(280, 64)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 16
+text = "I ACCEPT"
