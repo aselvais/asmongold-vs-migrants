@@ -38,6 +38,7 @@ This last block exists so the terms are long enough to require scrolling on a 10
 
 End of placeholder terms."""
 
+@onready var title_label: Label = $Center/VBox/Title
 @onready var play_button: Button = $Center/VBox/Actions/Play
 @onready var offensive_mode: CheckBox = $Center/VBox/Actions/OffensiveMode
 @onready var music: AudioStreamPlayer = $Music
@@ -47,23 +48,38 @@ End of placeholder terms."""
 @onready var terms_scroll: ScrollContainer = $TermsDialog/Center/Panel/Margin/VBox/Scroll
 @onready var terms_body: Label = $TermsDialog/Center/Panel/Margin/VBox/Scroll/Body
 @onready var accept_button: Button = $TermsDialog/Center/Panel/Margin/VBox/Accept
+@onready var story_dialog: Control = $StoryDialog
+@onready var story_dim: ColorRect = $StoryDialog/Dim
+@onready var story_panel: PanelContainer = $StoryDialog/Center/Panel
+@onready var story_scroll: ScrollContainer = $StoryDialog/Center/Panel/Margin/VBox/Scroll
+@onready var story_body: Label = $StoryDialog/Center/Panel/Margin/VBox/Scroll/Body
+@onready var continue_button: Button = $StoryDialog/Center/Panel/Margin/VBox/Continue
 
 
 func _ready() -> void:
 	_style_offensive_checkbox()
 	_style_terms_dialog()
+	_style_story_dialog()
 	offensive_mode.set_pressed_no_signal(GameSettings.OFFENCIVE_MODE)
+	_refresh_titles()
 	if not offensive_mode.toggled.is_connected(_on_offensive_mode_toggled):
 		offensive_mode.toggled.connect(_on_offensive_mode_toggled)
 	if not play_button.pressed.is_connected(_on_play_pressed):
 		play_button.pressed.connect(_on_play_pressed)
 	if not accept_button.pressed.is_connected(_on_terms_accepted):
 		accept_button.pressed.connect(_on_terms_accepted)
+	if not continue_button.pressed.is_connected(_on_story_continue):
+		continue_button.pressed.connect(_on_story_continue)
 	if not terms_dim.gui_input.is_connected(_on_terms_dim_gui_input):
 		terms_dim.gui_input.connect(_on_terms_dim_gui_input)
+	if not story_dim.gui_input.is_connected(_on_story_dim_gui_input):
+		story_dim.gui_input.connect(_on_story_dim_gui_input)
 	if not terms_scroll.resized.is_connected(_sync_terms_body_width):
 		terms_scroll.resized.connect(_sync_terms_body_width)
+	if not story_scroll.resized.is_connected(_sync_story_body_width):
+		story_scroll.resized.connect(_sync_story_body_width)
 	terms_dialog.hide()
+	story_dialog.hide()
 	play_button.grab_focus()
 	_start_music()
 
@@ -78,10 +94,11 @@ func _start_music() -> void:
 
 
 func _on_play_pressed() -> void:
-	if terms_dialog.visible:
+	if terms_dialog.visible or story_dialog.visible:
 		return
 	GameSettings.OFFENCIVE_MODE = offensive_mode.button_pressed
-	get_tree().change_scene_to_file(LEVEL_1_PATH)
+	_refresh_titles()
+	_show_story()
 
 
 func _on_offensive_mode_toggled(pressed: bool) -> void:
@@ -90,12 +107,17 @@ func _on_offensive_mode_toggled(pressed: bool) -> void:
 		_show_terms()
 		return
 	GameSettings.OFFENCIVE_MODE = false
+	_refresh_titles()
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if not terms_dialog.visible:
+	if not event.is_action_pressed(&"ui_cancel"):
 		return
-	if event.is_action_pressed(&"ui_cancel"):
+	if story_dialog.visible:
+		_hide_story()
+		get_viewport().set_input_as_handled()
+		return
+	if terms_dialog.visible:
 		_hide_terms()
 		get_viewport().set_input_as_handled()
 
@@ -103,6 +125,11 @@ func _unhandled_input(event: InputEvent) -> void:
 func _on_terms_dim_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		_hide_terms()
+
+
+func _on_story_dim_gui_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		_hide_story()
 
 
 func _show_terms() -> void:
@@ -121,29 +148,74 @@ func _hide_terms() -> void:
 func _on_terms_accepted() -> void:
 	offensive_mode.set_pressed_no_signal(true)
 	GameSettings.OFFENCIVE_MODE = true
+	_refresh_titles()
 	_hide_terms()
 
 
+func _show_story() -> void:
+	story_body.text = GameSettings.story_text()
+	if GameSettings.OFFENCIVE_MODE:
+		story_panel.custom_minimum_size = Vector2(900, 340)
+		story_scroll.custom_minimum_size = Vector2(820, 120)
+	else:
+		story_panel.custom_minimum_size = Vector2(900, 560)
+		story_scroll.custom_minimum_size = Vector2(820, 340)
+	story_dialog.show()
+	story_scroll.scroll_vertical = 0
+	continue_button.grab_focus()
+	call_deferred("_sync_story_body_width")
+
+
+func _hide_story() -> void:
+	story_dialog.hide()
+	play_button.grab_focus()
+
+
+func _on_story_continue() -> void:
+	get_tree().change_scene_to_file(LEVEL_1_PATH)
+
+
+func _refresh_titles() -> void:
+	title_label.text = GameSettings.menu_title()
+	GameSettings.apply_window_title()
+
+
 func _sync_terms_body_width() -> void:
-	var width := terms_scroll.size.x
-	var bar := terms_scroll.get_v_scroll_bar()
+	_sync_scroll_body_width(terms_scroll, terms_body)
+
+
+func _sync_story_body_width() -> void:
+	_sync_scroll_body_width(story_scroll, story_body)
+
+
+func _sync_scroll_body_width(scroll: ScrollContainer, body: Label) -> void:
+	var width := scroll.size.x
+	var bar := scroll.get_v_scroll_bar()
 	if bar:
 		width -= bar.size.x
-	terms_body.custom_minimum_size.x = maxf(0.0, width - 8.0)
+	body.custom_minimum_size.x = maxf(0.0, width - 8.0)
 
 
 func _style_terms_dialog() -> void:
+	_style_notice_panel(terms_panel, terms_body, 12)
+
+
+func _style_story_dialog() -> void:
+	_style_notice_panel(story_panel, story_body, 16)
+
+
+func _style_notice_panel(panel: PanelContainer, body: Label, font_size: int) -> void:
 	var panel_style := StyleBoxFlat.new()
 	panel_style.bg_color = Color(0.08, 0.08, 0.1, 0.98)
 	panel_style.border_color = CHECK_COLOR
 	panel_style.set_border_width_all(3)
 	panel_style.set_corner_radius_all(4)
-	terms_panel.add_theme_stylebox_override("panel", panel_style)
-	terms_body.add_theme_font_size_override("font_size", 12)
-	terms_body.add_theme_color_override("font_color", Color(1, 1, 1, 1))
-	terms_body.add_theme_color_override("font_outline_color", Color(0, 0, 0, 1))
-	terms_body.add_theme_constant_override("outline_size", 4)
-	terms_body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	panel.add_theme_stylebox_override("panel", panel_style)
+	body.add_theme_font_size_override("font_size", font_size)
+	body.add_theme_color_override("font_color", Color(1, 1, 1, 1))
+	body.add_theme_color_override("font_outline_color", Color(0, 0, 0, 1))
+	body.add_theme_constant_override("outline_size", 4)
+	body.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 
 
 func _style_offensive_checkbox() -> void:

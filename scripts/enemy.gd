@@ -38,6 +38,9 @@ var _speech_timer: Timer
 
 func _ready() -> void:
 	add_to_group("enemies")
+	if GameSettings.roles_flipped():
+		can_attack = not can_attack
+		score_value = -score_value
 	if sprite_frames_override:
 		$AnimatedSprite2D.sprite_frames = sprite_frames_override
 	super._ready()

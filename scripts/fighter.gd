@@ -1,10 +1,15 @@
 extends CharacterBody2D
 
 const SPEED := 360.0
-const STAGE_LEFT := 84.0
-const STAGE_RIGHT := 6316.0
-const STAGE_TOP := 1024.0 * 2.0 / 3.0
-const STAGE_BOTTOM := 890.0
+const DEFAULT_STAGE_LEFT := 84.0
+const DEFAULT_STAGE_RIGHT := 6316.0
+const DEFAULT_STAGE_TOP := 1024.0 * 2.0 / 3.0
+const DEFAULT_STAGE_BOTTOM := 890.0
+
+var STAGE_LEFT := DEFAULT_STAGE_LEFT
+var STAGE_RIGHT := DEFAULT_STAGE_RIGHT
+var STAGE_TOP := DEFAULT_STAGE_TOP
+var STAGE_BOTTOM := DEFAULT_STAGE_BOTTOM
 const BODY_HALF_WIDTH := 41.5
 const MAX_HITS := 5
 const STRIKE_HIT_START := 2
@@ -95,6 +100,12 @@ func take_hit(_from: Node) -> void:
 		_die()
 	else:
 		invulnerable = false
+
+
+func kill() -> void:
+	if dead:
+		return
+	_die()
 
 
 func _die() -> void:

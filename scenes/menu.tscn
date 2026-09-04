@@ -104,7 +104,7 @@ theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 8
 theme_override_font_sizes/font_size = 60
 text = "ASMONGOLD
-VS
+FOR
 MIGRANTS"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -203,3 +203,73 @@ layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 16
 text = "I ACCEPT"
+
+[node name="StoryDialog" type="Control" parent="." unique_id=1013313666]
+visible = false
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Dim" type="ColorRect" parent="StoryDialog" unique_id=1375981210]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.72)
+
+[node name="Center" type="CenterContainer" parent="StoryDialog" unique_id=255049139]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Panel" type="PanelContainer" parent="StoryDialog/Center" unique_id=1876421471]
+custom_minimum_size = Vector2(900, 560)
+layout_mode = 2
+
+[node name="Margin" type="MarginContainer" parent="StoryDialog/Center/Panel" unique_id=1827882077]
+layout_mode = 2
+theme_override_constants/margin_left = 28
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 28
+theme_override_constants/margin_bottom = 24
+
+[node name="VBox" type="VBoxContainer" parent="StoryDialog/Center/Panel/Margin" unique_id=1305563975]
+layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="Title" type="Label" parent="StoryDialog/Center/Panel/Margin/VBox" unique_id=2044198637]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.2, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 22
+text = "THE STORY"
+horizontal_alignment = 1
+
+[node name="Scroll" type="ScrollContainer" parent="StoryDialog/Center/Panel/Margin/VBox" unique_id=1866884920]
+custom_minimum_size = Vector2(820, 340)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="Body" type="Label" parent="StoryDialog/Center/Panel/Margin/VBox/Scroll" unique_id=963751285]
+layout_mode = 2
+size_flags_horizontal = 3
+autowrap_mode = 3
+
+[node name="Continue" type="Button" parent="StoryDialog/Center/Panel/Margin/VBox" unique_id=988425622]
+custom_minimum_size = Vector2(280, 64)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 16
+text = "CONTINUE"

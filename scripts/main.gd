@@ -5,9 +5,12 @@ const VIEW_HEIGHT := 1024.0
 const LEVEL_WIDTH := 6400.0
 const START_LIVES := 3
 const EXIT_X := 5400.0
-const LEVEL_2_PATH := "res://scenes/level_2.tscn"
 const BANNER_HOLD := 5.0
 const BANNER_FADE := 0.8
+
+@export_file("*.tscn") var next_level_path := "res://scenes/level_2.tscn"
+@export var stage_top: float = 1024.0 * 2.0 / 3.0
+@export var stage_bottom: float = 890.0
 
 @onready var camera: Camera2D = $Camera2D
 @onready var player: CharacterBody2D = $Player
@@ -26,6 +29,7 @@ var _exiting := false
 
 
 func _ready() -> void:
+	GameSettings.apply_window_title()
 	camera.make_current()
 	if not music.finished.is_connected(music.play):
 		music.finished.connect(music.play)
@@ -41,6 +45,7 @@ func _ready() -> void:
 	if pause_menu:
 		pause_menu.can_pause = true
 		pause_menu.hide()
+	_apply_stage_bounds()
 	_connect_enemies()
 	_refresh_hud()
 	_show_level_banner()
@@ -54,6 +59,28 @@ func _physics_process(_delta: float) -> void:
 		return
 	if _enemies_left <= 0 and player.global_position.x >= EXIT_X:
 		_start_exit()
+
+
+func _apply_stage_bounds() -> void:
+	_set_actor_stage_bounds(player)
+	for enemy in get_tree().get_nodes_in_group("enemies"):
+		_set_actor_stage_bounds(enemy)
+
+
+func _set_actor_stage_bounds(actor: Node) -> void:
+	if actor == null or not is_instance_valid(actor):
+		return
+	if "STAGE_TOP" in actor:
+		actor.STAGE_TOP = stage_top
+	if "STAGE_BOTTOM" in actor:
+		actor.STAGE_BOTTOM = stage_bottom
+	if actor is Node2D:
+		var body := actor as Node2D
+		body.global_position.y = clampf(body.global_position.y, stage_top, stage_bottom)
+	if "_home" in actor:
+		var home: Vector2 = actor._home
+		home.y = clampf(home.y, stage_top, stage_bottom)
+		actor._home = home
 
 
 func _connect_enemies() -> void:
@@ -98,8 +125,20 @@ func _on_player_health_changed(current: int, maximum: int) -> void:
 
 func _on_enemy_scored(points: int) -> void:
 	score += points
+	if score < 0:
+		score = 0
 	if hud:
 		hud.set_score(score)
+	if score <= 0:
+		_kill_from_zero_score()
+
+
+func _kill_from_zero_score() -> void:
+	if _exiting:
+		return
+	if player == null or not is_instance_valid(player) or player.dead:
+		return
+	player.kill()
 
 
 func _on_enemy_died(enemy: Node) -> void:
@@ -152,4 +191,4 @@ func _start_exit() -> void:
 	music.stop()
 	if is_instance_valid(player):
 		await player.walk_into_stairs(stairs.global_position)
-	get_tree().change_scene_to_file(LEVEL_2_PATH)
+	get_tree().change_scene_to_file(next_level_path)
