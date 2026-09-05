@@ -49,6 +49,10 @@ func _on_menu_pressed() -> void:
 
 
 func _is_pause_pressed(event: InputEvent) -> bool:
+	if event.is_echo():
+		return false
+	if event.is_action_pressed(&"pause"):
+		return true
 	if event.is_action_pressed(&"ui_cancel"):
 		return true
-	return event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_ESCAPE
+	return event is InputEventKey and event.pressed and event.keycode == KEY_ESCAPE

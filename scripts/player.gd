@@ -10,6 +10,7 @@ const KNOCKBACK_SPEED_Y := -700.0
 const KNOCKBACK_GRAVITY := 2600.0
 
 var dropping_in := false
+var intro_held := false
 var respawning := false
 var knockback := false
 var exiting := false
@@ -25,11 +26,15 @@ var _knock_land_y := 820.0
 func _ready() -> void:
 	add_to_group("player")
 	super._ready()
-	_begin_sky_drop(false)
+	_land_y = global_position.y
+	_hold_for_intro()
 
 
 func _physics_process(delta: float) -> void:
 	if dead:
+		velocity = Vector2.ZERO
+		return
+	if intro_held:
 		velocity = Vector2.ZERO
 		return
 	if exiting:
@@ -56,7 +61,7 @@ func _physics_process(delta: float) -> void:
 
 
 func take_hit(from: Node) -> void:
-	if dead or invulnerable or respawning or dropping_in or knockback or exiting:
+	if dead or invulnerable or respawning or dropping_in or intro_held or knockback or exiting:
 		return
 	_start_knockback(from)
 	await super.take_hit(from)
@@ -82,12 +87,49 @@ func revive() -> void:
 	await _begin_sky_drop(true)
 
 
+func _hold_for_intro() -> void:
+	intro_held = true
+	invulnerable = true
+	respawning = true
+	dropping_in = false
+	knockback = false
+	velocity = Vector2.ZERO
+	_drop_velocity = 0.0
+	_blink_until_msec = 0
+	_set_hitbox_active(false)
+	hurtbox.monitorable = false
+	sprite.visible = false
+	sprite.modulate.a = 1.0
+	global_position.y = DROP_START_Y
+
+
+func start_intro_drop() -> void:
+	if not intro_held or dead:
+		return
+	intro_held = false
+	invulnerable = true
+	respawning = false
+	dropping_in = true
+	_drop_velocity = DROP_START_SPEED
+	z_index = 4000
+	_play(&"idle")
+	sprite.visible = true
+	sprite.modulate.a = 1.0
+	while dropping_in and is_instance_valid(self) and not dead:
+		await get_tree().physics_frame
+	if not is_instance_valid(self) or dead:
+		return
+	hurtbox.monitorable = true
+	invulnerable = false
+
+
 func _begin_sky_drop(vanish_first: bool) -> void:
 	_land_y = clampf(global_position.y, STAGE_TOP, STAGE_BOTTOM)
 	dead = false
 	striking = false
 	invulnerable = true
 	respawning = true
+	intro_held = false
 	dropping_in = false
 	knockback = false
 	velocity = Vector2.ZERO
@@ -175,6 +217,7 @@ func walk_into_stairs(stairs_pos: Vector2) -> void:
 	striking = false
 	knockback = false
 	dropping_in = false
+	intro_held = false
 	respawning = false
 	velocity = Vector2.ZERO
 	_set_hitbox_active(false)

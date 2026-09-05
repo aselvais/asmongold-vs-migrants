@@ -5,12 +5,17 @@ const VIEW_HEIGHT := 1024.0
 const LEVEL_WIDTH := 6400.0
 const START_LIVES := 3
 const EXIT_X := 5400.0
-const BANNER_HOLD := 5.0
 const BANNER_FADE := 0.8
+const COUNTDOWN_BEAT := 0.35
+const COUNTDOWN_STEP := 1.0
+const GO_HOLD := 0.85
 
 @export_file("*.tscn") var next_level_path := "res://scenes/level_2.tscn"
 @export var stage_top: float = 1024.0 * 2.0 / 3.0
 @export var stage_bottom: float = 890.0
+@export var randomize_enemy_positions := false
+@export var enemy_min_x := 980.0
+@export var enemy_max_x := 5200.0
 
 @onready var camera: Camera2D = $Camera2D
 @onready var player: CharacterBody2D = $Player
@@ -18,7 +23,8 @@ const BANNER_FADE := 0.8
 @onready var hud: Control = $HUD/Status
 @onready var game_over: Control = $HUD/GameOver
 @onready var try_again: Button = $HUD/GameOver/VBox/TryAgain
-@onready var level_banner: Label = $HUD/LevelBanner
+@onready var level_banner: Control = $HUD/LevelBanner
+@onready var countdown_label: Label = $HUD/LevelBanner/Countdown
 @onready var pause_menu: PauseMenu = $HUD/Pause
 @onready var stairs: Marker2D = $SubwayStairs
 
@@ -31,6 +37,7 @@ var _exiting := false
 func _ready() -> void:
 	GameSettings.apply_window_title()
 	camera.make_current()
+	GameSettings.register_music_player(music)
 	if not music.finished.is_connected(music.play):
 		music.finished.connect(music.play)
 	if not music.playing:
@@ -45,6 +52,7 @@ func _ready() -> void:
 	if pause_menu:
 		pause_menu.can_pause = true
 		pause_menu.hide()
+	_randomize_enemy_positions()
 	_apply_stage_bounds()
 	_connect_enemies()
 	_refresh_hud()
@@ -59,6 +67,27 @@ func _physics_process(_delta: float) -> void:
 		return
 	if _enemies_left <= 0 and player.global_position.x >= EXIT_X:
 		_start_exit()
+
+
+func _randomize_enemy_positions() -> void:
+	if not randomize_enemy_positions:
+		return
+	var enemies := get_tree().get_nodes_in_group("enemies")
+	if enemies.is_empty():
+		return
+	enemies.shuffle()
+	var n := enemies.size()
+	var span := maxf(1.0, enemy_max_x - enemy_min_x)
+	for i in n:
+		var slot := (float(i) + randf_range(0.12, 0.88)) / float(n)
+		var x := clampf(enemy_min_x + slot * span, enemy_min_x, enemy_max_x)
+		var y := randf_range(stage_top + 6.0, stage_bottom - 6.0)
+		var body := enemies[i] as Node2D
+		if body == null:
+			continue
+		body.global_position = Vector2(x, y)
+		if "_home" in body:
+			body._home = body.global_position
 
 
 func _apply_stage_bounds() -> void:
@@ -76,7 +105,11 @@ func _set_actor_stage_bounds(actor: Node) -> void:
 		actor.STAGE_BOTTOM = stage_bottom
 	if actor is Node2D:
 		var body := actor as Node2D
-		body.global_position.y = clampf(body.global_position.y, stage_top, stage_bottom)
+		var held: bool = actor.get("intro_held") == true or actor.get("dropping_in") == true
+		if not held:
+			body.global_position.y = clampf(body.global_position.y, stage_top, stage_bottom)
+		if "_land_y" in actor:
+			actor._land_y = clampf(float(actor._land_y), stage_top, stage_bottom)
 	if "_home" in actor:
 		var home: Vector2 = actor._home
 		home.y = clampf(home.y, stage_top, stage_bottom)
@@ -108,7 +141,21 @@ func _show_level_banner() -> void:
 		return
 	level_banner.modulate.a = 1.0
 	level_banner.show()
-	await get_tree().create_timer(BANNER_HOLD).timeout
+	if countdown_label:
+		countdown_label.text = ""
+		countdown_label.modulate = Color(1, 1, 1, 1)
+	await get_tree().create_timer(COUNTDOWN_BEAT, false).timeout
+	if not is_instance_valid(self):
+		return
+	for n in [3, 2, 1]:
+		_set_countdown_text(str(n), Color(1, 1, 1, 1))
+		await get_tree().create_timer(COUNTDOWN_STEP, false).timeout
+		if not is_instance_valid(self):
+			return
+	_set_countdown_text("GO", Color(1, 0.85, 0.2, 1))
+	if is_instance_valid(player) and player.has_method("start_intro_drop"):
+		player.start_intro_drop()
+	await get_tree().create_timer(GO_HOLD, false).timeout
 	if not is_instance_valid(level_banner):
 		return
 	var tween := create_tween()
@@ -116,6 +163,13 @@ func _show_level_banner() -> void:
 	await tween.finished
 	if is_instance_valid(level_banner):
 		level_banner.hide()
+
+
+func _set_countdown_text(value: String, color: Color) -> void:
+	if countdown_label == null or not is_instance_valid(countdown_label):
+		return
+	countdown_label.text = value
+	countdown_label.add_theme_color_override("font_color", color)
 
 
 func _on_player_health_changed(current: int, maximum: int) -> void:

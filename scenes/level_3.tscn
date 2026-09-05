@@ -1,0 +1,507 @@
+[gd_scene format=3 uid="uid://b4t6ktekps1tt"]
+
+[ext_resource type="Script" uid="uid://cluy0d660gxss" path="res://scripts/player.gd" id="1_0wfyh"]
+[ext_resource type="Texture2D" uid="uid://5q1ewi5uajhr" path="res://assets/backgrounds/subway_tunnel.png" id="1_sugp2"]
+[ext_resource type="Script" uid="uid://ddloenhjvi8oe" path="res://scripts/main.gd" id="1_tefeu"]
+[ext_resource type="SpriteFrames" uid="uid://b213wslclyy22" path="res://assets/animations/asmongold_frames.tres" id="2_sugp2"]
+[ext_resource type="AudioStream" uid="uid://s3dxlbrtdxgx" path="res://assets/sfx/swoosh.wav" id="4_tbgi4"]
+[ext_resource type="PackedScene" uid="uid://y3cpv1mwx653" path="res://scenes/enemy.tscn" id="8_enemy"]
+[ext_resource type="AudioStream" uid="uid://srba1h0lqbx5" path="res://assets/sfx/wakbar.wav" id="8_isj1j"]
+[ext_resource type="SpriteFrames" uid="uid://dtssg4l2y767g" path="res://assets/animations/muslim_walk.tres" id="9_muslim"]
+[ext_resource type="SpriteFrames" uid="uid://dmux3sptndjj1" path="res://assets/animations/slim_pakistani_walk.tres" id="10_pakistani"]
+[ext_resource type="SpriteFrames" uid="uid://cy5ab6lx4w7u0" path="res://assets/animations/young_man_walk.tres" id="11_youngman"]
+[ext_resource type="SpriteFrames" uid="uid://d30cn3fudrs4p" path="res://assets/animations/slim_black_walk.tres" id="12_black"]
+[ext_resource type="SpriteFrames" uid="uid://b1xgbsqnsekg" path="res://assets/animations/slim_black2_walk.tres" id="13_black2"]
+[ext_resource type="SpriteFrames" uid="uid://bxn2siong521w" path="res://assets/animations/young_slim_walk.tres" id="14_youngslim"]
+[ext_resource type="SpriteFrames" uid="uid://cdhlj0hfejp7y" path="res://assets/animations/small_figure_walk.tres" id="15_small"]
+[ext_resource type="SpriteFrames" uid="uid://b37dxtewgo7pi" path="res://assets/animations/middleaged_white_walk.tres" id="16_middle"]
+[ext_resource type="SpriteFrames" uid="uid://dp8itdpdw23qk" path="res://assets/animations/obese_woman_walk.tres" id="17_obese"]
+[ext_resource type="AudioStream" uid="uid://dbtavxkcxedkt" path="res://assets/music/UndergroundLevel.mp3" id="17_wa6ex"]
+[ext_resource type="Script" uid="uid://cc4q15kny5y0m" path="res://scripts/hud.gd" id="18_hud"]
+[ext_resource type="Theme" uid="uid://dt2bmxhgu0exw" path="res://assets/ui/arcade_theme.tres" id="19_theme"]
+[ext_resource type="Script" uid="uid://onbt02iu3qjk" path="res://scripts/pause_menu.gd" id="21_pause"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jyhfs"]
+size = Vector2(36, 90)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hit"]
+size = Vector2(64, 72)
+
+[node name="Level3" type="Node2D" unique_id=515193215]
+y_sort_enabled = true
+script = ExtResource("1_tefeu")
+next_level_path = "res://scenes/menu.tscn"
+stage_top = 770.0
+stage_bottom = 860.0
+randomize_enemy_positions = true
+
+[node name="Background" type="Sprite2D" parent="." unique_id=1601266165]
+z_index = -10
+texture_filter = 1
+position = Vector2(3200, 512)
+texture = ExtResource("1_sugp2")
+
+[node name="Player" type="CharacterBody2D" parent="." unique_id=598633089 groups=["player"]]
+z_index = 1
+position = Vector2(640, 840)
+scale = Vector2(2, 2)
+collision_mask = 0
+script = ExtResource("1_0wfyh")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Player" unique_id=213904594]
+texture_filter = 1
+sprite_frames = ExtResource("2_sugp2")
+animation = &"idle"
+autoplay = "idle"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player" unique_id=1393633639]
+shape = SubResource("RectangleShape2D_jyhfs")
+
+[node name="Swoosh" type="AudioStreamPlayer" parent="Player" unique_id=1955714786]
+stream = ExtResource("4_tbgi4")
+volume_db = -2.0
+
+[node name="Hurtbox" type="Area2D" parent="Player" unique_id=1665064138]
+collision_layer = 8
+collision_mask = 0
+monitoring = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player/Hurtbox" unique_id=1620966829]
+shape = SubResource("RectangleShape2D_jyhfs")
+
+[node name="Hitbox" type="Area2D" parent="Player" unique_id=1389406624]
+position = Vector2(58, 0)
+collision_layer = 0
+collision_mask = 16
+monitoring = false
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player/Hitbox" unique_id=1004430177]
+shape = SubResource("RectangleShape2D_hit")
+
+[node name="Enemies" type="Node2D" parent="." unique_id=2117707585]
+y_sort_enabled = true
+
+[node name="Muslim" parent="Enemies" unique_id=1523067410 instance=ExtResource("8_enemy")]
+position = Vector2(1180, 820)
+sprite_frames_override = ExtResource("9_muslim")
+walk_speed = 250.0
+strike_speech = "Allahu Akbar"
+strike_stream = ExtResource("8_isj1j")
+
+[node name="Muslim2" parent="Enemies" unique_id=1709838528 instance=ExtResource("8_enemy")]
+position = Vector2(939, 687)
+sprite_frames_override = ExtResource("9_muslim")
+walk_speed = 250.0
+strike_speech = "SubhanAllah"
+strike_stream = ExtResource("8_isj1j")
+
+[node name="Muslim3" parent="Enemies" unique_id=124785141 instance=ExtResource("8_enemy")]
+position = Vector2(849, 886)
+sprite_frames_override = ExtResource("9_muslim")
+walk_speed = 250.0
+strike_speech = "Bismillah!"
+strike_stream = ExtResource("8_isj1j")
+
+[node name="Muslim4" parent="Enemies" unique_id=685481618 instance=ExtResource("8_enemy")]
+position = Vector2(6000, 864)
+sprite_frames_override = ExtResource("9_muslim")
+walk_speed = 250.0
+strike_speech = "Bismillah!"
+strike_stream = ExtResource("8_isj1j")
+
+[node name="Muslim5" parent="Enemies" unique_id=802246774 instance=ExtResource("8_enemy")]
+position = Vector2(6128, 648)
+sprite_frames_override = ExtResource("9_muslim")
+walk_speed = 250.0
+strike_speech = "Bismillah!"
+strike_stream = ExtResource("8_isj1j")
+
+[node name="Pakistani" parent="Enemies" unique_id=1496843189 instance=ExtResource("8_enemy")]
+position = Vector2(1760, 760)
+sprite_frames_override = ExtResource("10_pakistani")
+walk_speed = 250.0
+score_value = 150
+strike_speech = "I'm gonna r*pe you!"
+
+[node name="Pakistani2" parent="Enemies" unique_id=1622768222 instance=ExtResource("8_enemy")]
+position = Vector2(5824, 664)
+sprite_frames_override = ExtResource("10_pakistani")
+walk_speed = 250.0
+score_value = 150
+strike_speech = "I'm gonna r*pe you!"
+
+[node name="YoungMan" parent="Enemies" unique_id=1912800977 instance=ExtResource("8_enemy")]
+position = Vector2(1980, 850)
+sprite_frames_override = ExtResource("11_youngman")
+walk_speed = 270.0
+score_value = 200
+strike_speech = "Wanna buy some weed?"
+
+[node name="KnifeGuy" parent="Enemies" unique_id=148482274 instance=ExtResource("8_enemy")]
+position = Vector2(2240, 790)
+sprite_frames_override = ExtResource("12_black")
+walk_speed = 280.0
+score_value = 250
+strike_speech = "Karmelo was innocent!"
+
+[node name="KnifeGuy2" parent="Enemies" unique_id=1381100058 instance=ExtResource("8_enemy")]
+position = Vector2(5840, 864)
+sprite_frames_override = ExtResource("12_black")
+walk_speed = 280.0
+score_value = 250
+strike_speech = "Karmelo was innocent!"
+
+[node name="StickGuy" parent="Enemies" unique_id=1673617203 instance=ExtResource("8_enemy")]
+position = Vector2(2580, 840)
+sprite_frames_override = ExtResource("13_black2")
+walk_speed = 270.0
+score_value = 300
+strike_speech = "Give me free housing!"
+
+[node name="StickGuy2" parent="Enemies" unique_id=1076742490 instance=ExtResource("8_enemy")]
+position = Vector2(5600, 864)
+sprite_frames_override = ExtResource("13_black2")
+walk_speed = 270.0
+score_value = 300
+strike_speech = "Give me free housing!"
+
+[node name="StickGuy3" parent="Enemies" unique_id=1461097583 instance=ExtResource("8_enemy")]
+position = Vector2(5704, 760)
+sprite_frames_override = ExtResource("13_black2")
+walk_speed = 270.0
+score_value = 300
+strike_speech = "Give me free housing!"
+
+[node name="YoungSlim" parent="Enemies" unique_id=1140418660 instance=ExtResource("8_enemy")]
+position = Vector2(3360, 770)
+sprite_frames_override = ExtResource("14_youngslim")
+walk_speed = 190.0
+score_value = 350
+strike_speech = "Racism did that to me!"
+
+[node name="SmallFigure" parent="Enemies" unique_id=68633884 instance=ExtResource("8_enemy")]
+position = Vector2(3720, 830)
+sprite_frames_override = ExtResource("15_small")
+walk_speed = 220.0
+score_value = 400
+strike_speech = "Hijab frees women!"
+
+[node name="SmallFigure2" parent="Enemies" unique_id=2138138465 instance=ExtResource("8_enemy")]
+position = Vector2(5328, 880)
+sprite_frames_override = ExtResource("15_small")
+walk_speed = 220.0
+score_value = 400
+strike_speech = "Hijab frees women!"
+
+[node name="SmallFigure3" parent="Enemies" unique_id=2093068431 instance=ExtResource("8_enemy")]
+position = Vector2(5408, 712)
+sprite_frames_override = ExtResource("15_small")
+walk_speed = 220.0
+score_value = 400
+strike_speech = "Hijab frees women!"
+
+[node name="MiddleagedWhite" parent="Enemies" unique_id=1793249223 instance=ExtResource("8_enemy")]
+position = Vector2(3480, 880)
+sprite_frames_override = ExtResource("16_middle")
+walk_speed = 210.0
+score_value = -450
+strike_speech = "What are you doing? I am just going to work..."
+can_attack = false
+
+[node name="MiddleagedWhite2" parent="Enemies" unique_id=604513717 instance=ExtResource("8_enemy")]
+position = Vector2(1352, 888)
+sprite_frames_override = ExtResource("16_middle")
+walk_speed = 210.0
+score_value = -450
+strike_speech = "What are you doing? I am just going to work..."
+can_attack = false
+
+[node name="MiddleagedWhite3" parent="Enemies" unique_id=52069631 instance=ExtResource("8_enemy")]
+position = Vector2(4192, 832)
+sprite_frames_override = ExtResource("16_middle")
+walk_speed = 210.0
+score_value = -450
+strike_speech = "What are you doing? I am just going to work..."
+can_attack = false
+
+[node name="ObeseWoman" parent="Enemies" unique_id=567668624 instance=ExtResource("8_enemy")]
+position = Vector2(1536, 832)
+sprite_frames_override = ExtResource("17_obese")
+walk_speed = 170.0
+score_value = 500
+strike_speech = "No one is illegal on stolen land!"
+
+[node name="ObeseWoman2" parent="Enemies" unique_id=81265183 instance=ExtResource("8_enemy")]
+position = Vector2(3041, 729)
+sprite_frames_override = ExtResource("17_obese")
+walk_speed = 170.0
+score_value = 500
+strike_speech = "Free Palestine!"
+
+[node name="ObeseWoman3" parent="Enemies" unique_id=1267295748 instance=ExtResource("8_enemy")]
+position = Vector2(4504, 744)
+sprite_frames_override = ExtResource("17_obese")
+walk_speed = 170.0
+score_value = 500
+strike_speech = "migrants are oppressed by white men like you!"
+
+[node name="Music" type="AudioStreamPlayer" parent="." unique_id=856043903]
+stream = ExtResource("17_wa6ex")
+volume_db = -8.0
+autoplay = true
+
+[node name="SubwayStairs" type="Marker2D" parent="." unique_id=1713003749]
+position = Vector2(5720, 820)
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=442495124]
+position = Vector2(640, 512)
+limit_left = 0
+limit_top = 0
+limit_right = 6400
+limit_bottom = 1024
+
+[node name="HUD" type="CanvasLayer" parent="." unique_id=381229184]
+process_mode = 3
+
+[node name="Status" type="Control" parent="HUD" unique_id=1678443013]
+layout_mode = 3
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 132.0
+grow_horizontal = 2
+mouse_filter = 2
+theme = ExtResource("19_theme")
+script = ExtResource("18_hud")
+
+[node name="Backdrop" type="ColorRect" parent="HUD/Status" unique_id=1054324461]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0.62)
+
+[node name="Margin" type="MarginContainer" parent="HUD/Status" unique_id=1297840047]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 28
+theme_override_constants/margin_bottom = 10
+
+[node name="Row" type="HBoxContainer" parent="HUD/Status/Margin" unique_id=1795628477]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="PlayerBlock" type="VBoxContainer" parent="HUD/Status/Margin/Row" unique_id=289302578]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Name" type="Label" parent="HUD/Status/Margin/Row/PlayerBlock" unique_id=366892391]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.2, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 16
+text = "ASMONGOLD"
+
+[node name="HealthBar" type="ProgressBar" parent="HUD/Status/Margin/Row/PlayerBlock" unique_id=1524285636]
+custom_minimum_size = Vector2(360, 24)
+layout_mode = 2
+max_value = 5.0
+value = 5.0
+show_percentage = false
+
+[node name="Lives" type="Label" parent="HUD/Status/Margin/Row/PlayerBlock" unique_id=1412388161]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.2, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 16
+text = "LIVES x 3"
+
+[node name="Spacer" type="Control" parent="HUD/Status/Margin/Row" unique_id=810254958]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="ScoreBlock" type="VBoxContainer" parent="HUD/Status/Margin/Row" unique_id=818221893]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="ScoreTitle" type="Label" parent="HUD/Status/Margin/Row/ScoreBlock" unique_id=1252940275]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.2, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 16
+text = "SCORE"
+horizontal_alignment = 2
+
+[node name="ScoreValue" type="Label" parent="HUD/Status/Margin/Row/ScoreBlock" unique_id=928579931]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 24
+text = "000000"
+horizontal_alignment = 2
+
+[node name="LevelBanner" type="VBoxContainer" parent="HUD" unique_id=578458913]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -320.0
+offset_top = -90.0
+offset_right = 320.0
+offset_bottom = 110.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme = ExtResource("19_theme")
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="Title" type="Label" parent="HUD/LevelBanner" unique_id=473362591]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 0.85, 0.2, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 40
+text = "LEVEL 3"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Countdown" type="Label" parent="HUD/LevelBanner" unique_id=961529865]
+custom_minimum_size = Vector2(0, 72)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 56
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="GameOver" type="Control" parent="HUD" unique_id=220804606]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("19_theme")
+
+[node name="Dim" type="ColorRect" parent="HUD/GameOver" unique_id=912355960]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.72)
+
+[node name="VBox" type="VBoxContainer" parent="HUD/GameOver" unique_id=2034872919]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -240.0
+offset_top = -110.0
+offset_right = 240.0
+offset_bottom = 110.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 32
+alignment = 1
+
+[node name="Title" type="Label" parent="HUD/GameOver/VBox" unique_id=1546408680]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.18, 0.18, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 40
+text = "GAME OVER"
+horizontal_alignment = 1
+
+[node name="TryAgain" type="Button" parent="HUD/GameOver/VBox" unique_id=1468596774]
+custom_minimum_size = Vector2(280, 64)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 16
+text = "TRY AGAIN"
+
+[node name="Pause" type="Control" parent="HUD" unique_id=415809328]
+process_mode = 3
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("19_theme")
+script = ExtResource("21_pause")
+
+[node name="Dim" type="ColorRect" parent="HUD/Pause" unique_id=1545834516]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.72)
+
+[node name="VBox" type="VBoxContainer" parent="HUD/Pause" unique_id=1214782477]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -260.0
+offset_top = -170.0
+offset_right = 260.0
+offset_bottom = 170.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 28
+alignment = 1
+
+[node name="Title" type="Label" parent="HUD/Pause/VBox" unique_id=850822087]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.2, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 40
+text = "PAUSED"
+horizontal_alignment = 1
+
+[node name="Resume" type="Button" parent="HUD/Pause/VBox" unique_id=216964703]
+custom_minimum_size = Vector2(360, 64)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 16
+text = "RESUME"
+
+[node name="BackToMenu" type="Button" parent="HUD/Pause/VBox" unique_id=1347244435]
+custom_minimum_size = Vector2(360, 64)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 16
+text = "BACK TO MENU"

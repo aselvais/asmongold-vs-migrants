@@ -85,6 +85,7 @@ func _ready() -> void:
 
 
 func _start_music() -> void:
+	GameSettings.register_music_player(music)
 	if music.stream != null and "loop" in music.stream:
 		music.stream.loop = true
 	if not music.finished.is_connected(music.play):
@@ -155,7 +156,7 @@ func _on_terms_accepted() -> void:
 func _show_story() -> void:
 	story_body.text = GameSettings.story_text()
 	if GameSettings.OFFENCIVE_MODE:
-		story_panel.custom_minimum_size = Vector2(900, 340)
+		story_panel.custom_minimum_size = Vector2(900, 560)
 		story_scroll.custom_minimum_size = Vector2(820, 120)
 	else:
 		story_panel.custom_minimum_size = Vector2(900, 560)

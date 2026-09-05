@@ -30,7 +30,7 @@ size = Vector2(64, 72)
 [node name="Level2" type="Node2D" unique_id=515193215]
 y_sort_enabled = true
 script = ExtResource("1_tefeu")
-next_level_path = "res://scenes/menu.tscn"
+next_level_path = "res://scenes/level_3.tscn"
 stage_top = 620.0
 stage_bottom = 750.0
 
@@ -267,7 +267,7 @@ process_mode = 3
 layout_mode = 3
 anchors_preset = 10
 anchor_right = 1.0
-offset_bottom = 118.0
+offset_bottom = 132.0
 grow_horizontal = 2
 mouse_filter = 2
 theme = ExtResource("19_theme")
@@ -334,8 +334,8 @@ mouse_filter = 2
 
 [node name="ScoreBlock" type="VBoxContainer" parent="HUD/Status/Margin/Row" unique_id=818221893]
 layout_mode = 2
-theme_override_constants/separation = 2
-alignment = 2
+theme_override_constants/separation = 4
+alignment = 0
 
 [node name="ScoreTitle" type="Label" parent="HUD/Status/Margin/Row/ScoreBlock" unique_id=1252940275]
 layout_mode = 2
@@ -355,24 +355,43 @@ theme_override_font_sizes/font_size = 24
 text = "000000"
 horizontal_alignment = 2
 
-[node name="LevelBanner" type="Label" parent="HUD" unique_id=578458913]
+[node name="LevelBanner" type="VBoxContainer" parent="HUD" unique_id=578458913]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -280.0
-offset_top = -40.0
-offset_right = 280.0
-offset_bottom = 40.0
+offset_left = -320.0
+offset_top = -90.0
+offset_right = 320.0
+offset_bottom = 110.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 theme = ExtResource("19_theme")
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="Title" type="Label" parent="HUD/LevelBanner"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+size_flags_horizontal = 3
 theme_override_colors/font_color = Color(1, 0.85, 0.2, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 8
 theme_override_font_sizes/font_size = 40
 text = "LEVEL 2"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Countdown" type="Label" parent="HUD/LevelBanner"]
+custom_minimum_size = Vector2(0, 72)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 56
 horizontal_alignment = 1
 vertical_alignment = 1
 

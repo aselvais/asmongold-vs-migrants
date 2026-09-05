@@ -231,7 +231,7 @@ grow_vertical = 2
 mouse_filter = 2
 
 [node name="Panel" type="PanelContainer" parent="StoryDialog/Center" unique_id=1876421471]
-custom_minimum_size = Vector2(900, 560)
+custom_minimum_size = Vector2(900, 854)
 layout_mode = 2
 
 [node name="Margin" type="MarginContainer" parent="StoryDialog/Center/Panel" unique_id=1827882077]

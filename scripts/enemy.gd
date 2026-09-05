@@ -69,6 +69,9 @@ func _physics_process(delta: float) -> void:
 	if _player == null or not is_instance_valid(_player) or bool(_player.get("dead")) or not can_attack:
 		_wander(delta)
 		return
+	if _player.get("intro_held") == true or _player.get("dropping_in") == true or _player.get("respawning") == true:
+		_wander(delta)
+		return
 
 	var to_player: Vector2 = _player.global_position - global_position
 	var in_range := absf(to_player.x) <= ATTACK_RANGE_X and absf(to_player.y) <= ATTACK_RANGE_Y
